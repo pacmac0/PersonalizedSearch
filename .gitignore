@@ -348,3 +348,8 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+crawler/msn.json
+elasticsearch-7.12.0/
+data/
+MIND-master/
