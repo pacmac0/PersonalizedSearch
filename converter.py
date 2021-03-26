@@ -4,7 +4,7 @@ import json
 import collections
 
 header = ["News ID", "Category", "SubCategory", "Title", "Abstract", "URL"]
-src = "./data/news.tsv"
+src = "./news.tsv"
 dst = "./news.json"
 
 
