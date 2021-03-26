@@ -8,12 +8,6 @@ class MSNSpider(scrapy.Spider):
     name = "msn"
     allowed_domains = ["msn.com"]
 
-    start_urls = []
-    with open(os.environ["MIND_NEWS_PATH"], 'r') as f:
-        for l in f:
-            _, _, _, _, _, url, _, _ = l.strip('\n').split('\t')
-            start_urls.append(url)
-
     # start_urls = [
     #     # ss
     #     "https://mind201910small.blob.core.windows.net/archive/AAGH0ET.html",
@@ -26,20 +20,57 @@ class MSNSpider(scrapy.Spider):
     def __init__(self):
         with open('./doc_type.json', 'r') as f:
             self.doc_type = json.load(f)
+            self.lineCount = 0
+            self.news_ids_list = []
+            self.categories_list = []
+            self.sub_categories_list = []
+            self.titles_list = []
+            self.abstracts_list = []
+            self.title_entities_list = []
+            self.abstract_entites_list = []
 
         super().__init__()
+        
+    
+    def start_requests(self):
+        with open(os.environ["MIND_NEWS_PATH"], 'r') as f:
+            for l in f:
+                news_id, category, sub_category, title, abstract, url, title_entities, abstract_entites = l.strip('\n').split('\t')
+                yield scrapy.Request(url=url, callback=self.parse, meta={
+                    'news_id': news_id,
+                    'category': category,
+                    'sub_category': sub_category,
+                    'title': title,
+                    'abstract': abstract,
+                    'url': url,
+                    'title_entities': title_entities,
+                    'abstract_entites': abstract_entites,
+                })
 
     def parse(self, response):
-
         url = unquote(response.url)
         item = NewsItem()
+        item['url'] = url
         # parse nid, vert and subvert
         nid_type = self.parse_nid_from_url(item, url)
+
+        # add news columns to item
+        self.fillItemUp(item, response.meta)
 
         # parse body from response
         self.parse_body(response, item, nid_type)
 
         yield item
+
+    def fillItemUp(self, item, meta):
+        item['news_id']          = meta['news_id']
+        item['category']         = meta['category']
+        item['sub_category']     = meta['sub_category']
+        item['title']            = meta['title']
+        item['abstract']         = meta['abstract']
+        item['title_entities']   = meta['title_entities']
+        item['abstract_entites'] = meta['abstract_entites']
+        
 
     def parse_nid_from_url(self, item, url):
         item['nid'] = url.split('/')[-1].split('.')[-2]
@@ -62,7 +93,7 @@ class MSNSpider(scrapy.Spider):
         if nid_type == 'vi':
             body = response.xpath('//div[@class="video-description"]//text()').getall()
 
-        item['body'] = body
+        item['body'] = "".join(body)
         
 
          
