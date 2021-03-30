@@ -29,12 +29,12 @@ class Search extends React.Component {
     const query = {
       query: {
         match: {
-          "Category": this.state.searchbar
+          "category": this.state.searchbar
         }
       }
     };
     
-    axios.get('http://localhost:9200/bank/_search', {
+    axios.get('http://localhost:9200/news/_search', {
       params: {
         source: JSON.stringify(query),
         source_content_type: 'application/json'
@@ -59,7 +59,7 @@ class Search extends React.Component {
         this.state.results.length !== 0?
         <div>
         {this.state.results.map((elem, index) => {
-          return <a href={elem._source.URL}> {elem._source.Title}</a>
+          return <a href={elem._source.url} key={index}> {elem._source.title}</a>
         })}
         </div>
         :
