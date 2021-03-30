@@ -1,5 +1,6 @@
 import sys
 import json
+import collections
 
 """
 EXAMPLE format
@@ -8,17 +9,26 @@ EXAMPLE format
 """
 
 def main(src, dst):
-    with open(dst, 'w') as f_out, open(src,"r") as f_in:
+    with open(src,"r") as f_in:
+        dst_deconstruct = dst.split('.')
         for idx, line in enumerate(f_in):
+            if idx % 10000 == 0:
+                dst = "".join(dst_deconstruct[:-1]) + "_{}.".format((10000 + idx)) + dst_deconstruct[-1]
+                print(dst)
+                if idx != 0:
+                    f_out.close()
+                f_out = open(dst, 'w')
+            
             if line[0] in ['[', ']']:
                 continue
             if line[-2] == ',':
                 obj_str = json.loads(line[:-2])
             else:
                 obj_str = json.loads(line[:-1])
-            json.dump({"index":{"news_id":obj_str['news_id']}}, f_out)
+            json.dump({"index":{"_id":obj_str['news_id']}}, f_out)
             f_out.write("\n")
-            json.dump(obj_str, f_out)
+            entry = collections.OrderedDict(obj_str)
+            json.dump(entry, f_out)
             f_out.write("\n")
             print("Line read: %d"%idx, end = "\r")
     print("Convert finished")

@@ -50,15 +50,16 @@ class MSNSpider(scrapy.Spider):
     def parse(self, response):
         url = unquote(response.url)
         item = NewsItem()
-        item['url'] = url
-        # parse nid, vert and subvert
-        nid_type = self.parse_nid_from_url(item, url)
 
         # add news columns to item
         self.fillItemUp(item, response.meta)
 
+        # parse nid, vert and subvert
+        nid_type = self.parse_nid_from_url(item, url)
+
         # parse body from response
         self.parse_body(response, item, nid_type)
+        item['url'] = url
 
         yield item
 
