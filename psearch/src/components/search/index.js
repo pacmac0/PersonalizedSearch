@@ -3,7 +3,13 @@ import axios from 'axios';
 import { CSSTransition } from 'react-transition-group';
 import {
     SearchBox,
-    SearchWrapper
+    SearchWrapper,
+    ResultsWrapper,
+    ResultWrapper,
+    CiteWrapper,
+    NewsTitle,
+    NewsAbstract,
+    NewsUrl
 } from './style';
 
 class Search extends Component {
@@ -41,12 +47,18 @@ class Search extends Component {
     getResults() {
         const query = {
             query: {
-                match: {
-                    "Category": this.state.searchbar
+                bool: {
+                    should: [
+                        { match: { "abstract" : this.state.searchbar}},
+                        { match: { "title" : this.state.searchbar}},
+                        { match: { "category" : this.state.searchbar}},
+                        { match: { "sub_category" : this.state.searchbar}},
+                        { match: { "body" : this.state.searchbar}}
+                    ]
                 }
             }
         };
-        axios.get("http://localhost:9200/bank/_search?", {
+        axios.get("http://localhost:9200/news/_search?", {
             params: {
                 source: JSON.stringify(query),
                 source_content_type: 'application/json'
@@ -61,6 +73,7 @@ class Search extends Component {
     
     render() {
         return (
+            <div>
             <SearchWrapper> 
                 <form onSubmit={this.handleSubmit}>
                     <CSSTransition
@@ -77,18 +90,29 @@ class Search extends Component {
                     </CSSTransition>
                 </form>
                 <i className={this.state.focused ? 'focused iconfont zoom' : 'iconfont zoom'}>&#xebde;</i>
-            
+            </SearchWrapper>
+            <ResultsWrapper>
             {
                 this.state.results.length !== 0?
                 <div>
                 {this.state.results.map((elem, index) => {
-                    return <li><a href={elem._source.URL}> {elem._source.Title}</a></li>
-                })}
+                    return (
+                        <ResultWrapper key={index}>
+                            <CiteWrapper>
+                                <NewsUrl>{elem._source.url} {'>'} {elem._source.category} {'>'} {elem._source.sub_category}</NewsUrl>
+                            </CiteWrapper>
+                            
+                            <NewsTitle><a href={elem._source.url}> {elem._source.title}</a></NewsTitle>
+                            <NewsAbstract>{elem._source.abstract}</NewsAbstract>
+                        </ResultWrapper>
+                    )
+                })}h
                 </div>
                 :
                 <div></div>
             }
-            </SearchWrapper>
+            </ResultsWrapper>
+        </div>
         );
     }
 }
