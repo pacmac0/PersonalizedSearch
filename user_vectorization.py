@@ -1,6 +1,6 @@
 from elasticsearch import Elasticsearch
 import json
-import ElastifConfig
+import Config
 import utils
 import sys
 
@@ -93,16 +93,14 @@ def vectorize_users():
     es = Elasticsearch(Config.elastic_host, port=Config.elastic_port, timeout=Config.timeout)
 
     with open(src, 'r') as user_histories:
-        for idx, line in enumerate(f_in):
-            if idx % 2 != 0:
+        for idx, user_str in enumerate(user_histories):
+            if idx % 2 != 0: # exclude the elastic identifier line
                 continue
             
-            user_hist = json.loads(line)
-
-            get_term_vectors_from_history(es, user_hist['history'], 'news', ['title','category','body'])
-
-
-def main():
+            user_hist = json.loads(user_str)
+            user_obj = get_term_vectors_from_history(es, user_hist['history'], Config.index, Config.news_fields)
+            user_id = user_hist['user_id']
+            # TODO store in DB 
 
 if __name__ == '__main__':
     vectorize_users()
