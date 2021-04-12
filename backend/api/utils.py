@@ -29,6 +29,25 @@ def search(query, es):
     results = es.search(index="news", body=body)
     return results
 
+def get_term_vectors(ids, news_fields, es):
+    body = {
+        "ids": ids,
+        "parameters": {
+            "fields": news_fields,
+            "offsets" : False,
+            "payloads" : False,
+            "positions" : False,
+            "term_statistics" : True,
+            "field_statistics": True,
+            "filter": {
+                "min_term_freq": 1,
+            }
+        }
+    }
+    results = es.mtermvectors(body=body, index="news")
+    return results
+
+
 def aggregate_vecs(user_vectors, weights):
 
     ret = dict()

@@ -86,9 +86,9 @@ def get_recommendations():
 
 def personalized_search():
     data = request.args
-    news_fields = ['title','category','body']
     user = utils.get_user(data["id"], es)
-    
+    news_fields = ['title','category','body']
+
     # Regular search
     search_results = utils.search(data["query"], es)
 
@@ -100,21 +100,9 @@ def personalized_search():
     history = user["hits"]["hits"][0]["_source"]["history"]
     if len(history) > 10:
         history = history[-10:]
-    body = {
-        "ids": history,
-        "parameters": {
-            "fields": news_fields,
-            "offsets" : False,
-            "payloads" : False,
-            "positions" : False,
-            "term_statistics" : True,
-            "field_statistics": True,
-            "filter": {
-                "min_term_freq": 1,
-            }
-        }
-    }
-    results = es.mtermvectors(body=body, index="news")
+    
+    # Term vectors of history ids. 
+    results = utils.get_term_vectors(history, news_fields, es)
     ret = dict()
     for c in news_fields:
         ret[c] = dict()
@@ -134,7 +122,7 @@ def personalized_search():
     for key, value in ret.items():
         ret[key] = utils.normalize_vec(value)
 
-    # TO DO. Dot product and sort search results
+    # TO DO. (Cosine similarity) Dot product and sort search results
 
     return success_response(ret)
 
