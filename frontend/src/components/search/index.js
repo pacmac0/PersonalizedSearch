@@ -44,6 +44,7 @@ class Search extends Component {
         this.setState({focused: false});
     }
 
+    /*
     getResults() {
         const query = {
             query: {
@@ -68,6 +69,21 @@ class Search extends Component {
             this.setState({"results":res.data.hits.hits});
         })
     }
+    */
+    
+    getResults() {
+        axios.get("http://localhost:8080/api/regularsearch", {
+            params: {
+                query: this.state.searchbar,
+            },
+        }).then((res)=> {
+            console.log(res.data.result.hits.hits);
+            this.setState({"results":res.data.result.hits.hits});
+        }).catch((e) => {
+            console.log(e)
+        })
+    }
+    
 
         
     
