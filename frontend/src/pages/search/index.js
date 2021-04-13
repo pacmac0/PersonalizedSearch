@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Search from '../../components/search';
-import Header from '../../common/header';
+import Header from '../../components/header';
 
 class SearchResultView extends Component {
 
