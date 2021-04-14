@@ -1,3 +1,4 @@
 import HomeView from "./HomeView";
+import SearchResultView from "./SearchResultView";
 
-export { HomeView };
+export { HomeView, SearchResultView };

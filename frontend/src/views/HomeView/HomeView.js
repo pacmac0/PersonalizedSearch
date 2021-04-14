@@ -5,14 +5,17 @@ import {
     StyledSearchWrapper,
     StyledSearchInputBox
 } from "./style";
-import {
-    Search
-} from "react-bootstrap-icons";
+import { Search } from "react-bootstrap-icons";
+import { CSSTransition } from 'react-transition-group';
 
 function HomeView(props) {
 
     const {
-        model,
+        focus,
+        onSearch,
+        onChange,
+        onFocus,
+        onBlur
     } = props;
 
     return (
@@ -22,8 +25,22 @@ function HomeView(props) {
                     <StyledTitleWrapper>
                         Personalized News Search
                     </StyledTitleWrapper>
+                    
                     <StyledSearchWrapper>
-                        <StyledSearchInputBox />
+                        <form onSubmit={onSearch}>
+                            <CSSTransition
+                                in = {focus}
+                                timeout = {200}
+                                classNames = 'slide'
+                            >
+                                <StyledSearchInputBox 
+                                    className = {focus ? "focused" : ''}
+                                    onFocus = {onFocus}
+                                    onBlur = {onBlur}
+                                    onChange = {onChange}
+                                />
+                            </CSSTransition>
+                        </form>
                         <Search />
                     </StyledSearchWrapper>
                 </StyledHomeContainer>

@@ -52,5 +52,22 @@ export const StyledSearchInputBox = styled.input.attrs({
     &::placeholder {
         color: #999;
     }
+    &.focused {
+        width: 400px;
+    }
+    &.slide-enter {
+        width: 320px;
+        transition: all .2s ease-in;
+    }
+    &.slide-enter-active {
+        width: 400px;
+    }
+    &.slide-exit {
+        width: 400px;
+        transition: all .2s ease-out;
+    }
+    &.slide-exit-active {
+        width: 320px;
+    }
 `;
 

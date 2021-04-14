@@ -122,7 +122,7 @@ class Search extends Component {
                             <NewsAbstract>{elem._source.abstract}</NewsAbstract>
                         </ResultWrapper>
                     )
-                })}h
+                })}
                 </div>
                 :
                 <div></div>

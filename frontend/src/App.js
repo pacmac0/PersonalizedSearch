@@ -20,7 +20,7 @@ function App(props) {
                     <HomePresenter model={model} />
                 </Route>
 
-                <Route path="/search">
+                <Route path="/search/:query">
                     <SearchResultPresenter model={model} />
                 </Route>
 
