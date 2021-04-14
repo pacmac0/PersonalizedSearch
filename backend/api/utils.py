@@ -81,5 +81,15 @@ def normalize_vec(term_vec, ord_=2):
     return ret
 
 
+def cosine_similarity(vec1, vec2):
 
+    # Normalize vectors with L2-norm
+    n_vec1 = normalize_vec(vec1, ord_=2)
+    n_vec2 = normalize_vec(vec2, ord_=2)
 
+    # sum the similarity
+    ret = 0.0
+    for w in n_vec1.keys(): # w: an iterator for word
+        ret += n_vec1.get(w, 0) * n_vec2.get(w, 0)
+
+    return ret

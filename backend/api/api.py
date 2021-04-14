@@ -122,9 +122,51 @@ def personalized_search():
     for key, value in ret.items():
         ret[key] = utils.normalize_vec(value)
 
-    # TO DO. (Cosine similarity) Dot product and sort search results
+    # Obtain documents vectors 
+    ids = []
+    docs_vectors = dict()
+    # find doc ids 
+    for s_rslt in search_results["hits"]["hits"]:
+        ids.append(s_rslt["_id"])
+    # construct doc vectors
+    results_doc = utils.get_term_vectors(ids, news_fields, es)
+    for doc in results_doc['docs']:
+        if "term_vectors" in doc:
+            docs_vectors[doc["_id"]] = dict()
+            for k in news_fields:
+                if k in doc["term_vectors"]:
+                    docs_vectors[doc["_id"]][k] = dict()
+                    term_vec = doc["term_vectors"][k]["terms"] 
+                    for t, t_value in term_vec.items():
+                        docs_vectors[doc["_id"]][k][t] = t_value["score"]
 
-    return success_response(ret)
+
+    # (Cosine similarity) Dot product and sort search results
+    
+    # user vector = w_1*body_vector + w_1*category + w_3*title
+    weights = dict()
+    weights["body"] = 1
+    weights["category"] = 5
+    weights["title"] = 2
+    user_vector  = utils.aggregate_vecs(ret, weights)
+
+    scores = dict()
+    for doc, vector in docs_vectors.items():
+        document_vector  = utils.aggregate_vecs(vector, weights)
+        score = utils.cosine_similarity(document_vector, user_vector)
+        scores[doc] = score
+    
+    #scores = utils.get_sorted_dict(scores)
+
+    # change documents score
+
+    for s_rslt in search_results["hits"]["hits"]:
+        s_rslt['_score'] = scores[s_rslt['_id']]
+
+    # reorder documents
+
+    search_results["hits"]["hits"] = sorted(search_results["hits"]["hits"], key=lambda k: k['_score'], reverse=True)
+    return success_response(search_results["hits"]["hits"])
 
 
 
