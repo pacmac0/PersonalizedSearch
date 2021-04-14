@@ -1,3 +1,4 @@
+import { NewsBlockPresenter } from "../../presenters";
 import {
     ResultWrapper,
     CiteWrapper,
@@ -19,14 +20,15 @@ function SearchResultView(props) {
                 <div>
                     {data.map((elem,index) => {
                         return (
-                            <ResultWrapper key={index}>
-                                <CiteWrapper>
-                                    <NewsUrl>{elem._source.url} {'>'} {elem._source.category} {'>'} {elem._source.sub_category}</NewsUrl>
-                                </CiteWrapper>
-                                
-                                <NewsTitle><a href={elem._source.url}> {elem._source.title}</a></NewsTitle>
-                                <NewsAbstract>{elem._source.abstract}</NewsAbstract>
-                            </ResultWrapper>
+                            <NewsBlockPresenter 
+                                key={elem._id}
+                                id={elem._id}
+                                url={elem._source.url}
+                                title={elem._source.title}
+                                category={elem._source.category}
+                                sub_category={elem._source.sub_category}
+                                abstract={elem._source.abstract}       
+                            />
                         )
                     })}
                 </div>

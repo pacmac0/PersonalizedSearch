@@ -26,7 +26,6 @@ function usePromise(promise) {
         async function fetchData() {
             try {
                 const promiseData = await promise;
-                console.log("data:" + promiseData);
                 setData(promiseData);
             } catch (promiseError) {
                 setError(promiseError);

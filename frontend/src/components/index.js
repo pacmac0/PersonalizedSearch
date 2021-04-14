@@ -1,3 +1,4 @@
 import promiseNoData from "./promiseNoData";
+import NewsBlock from "./NewsBlock";
 
-export { promiseNoData };
+export { NewsBlock, promiseNoData };
