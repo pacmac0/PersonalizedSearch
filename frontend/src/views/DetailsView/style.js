@@ -3,15 +3,18 @@ import { Button } from "react-bootstrap";
 
 export const StyledDetailsView = styled.div`
     width: 100%auto;
-    height: 100vh;
+    min-height: 100vh;
+    margin: 0;
     background-color: #eee;
+    background-size: 100vw;
     display: flex;
     justify-content: center;
-    align-items: center;
 `;
 
 export const ContentWrapper = styled.div`
     width: 60%;
+    margin-top: 100px;
+    margin-bottom: 200px;
 `;
 
 export const RecommendationWrapper = styled.div`
@@ -27,8 +30,10 @@ export const StyledNewsTitle = styled.div`
 
 export const StyledContent = styled.div`
     font-size: 20px;
-    font-family: 'Courier New', Courier, monospace;
+    line-height: 28px;
+    font-family: Georgia;
     text-align: left;
+    overflow-y: scroll;
 `;
 
 export const StyledReturnWrapper = styled.div`

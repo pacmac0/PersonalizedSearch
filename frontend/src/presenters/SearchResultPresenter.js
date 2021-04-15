@@ -4,6 +4,8 @@ import { NewsSource } from "../model";
 import { usePromise } from "./customHooks";
 import { SearchResultView } from "../views";
 import { promiseNoData } from "../components";
+import SearchBarPresenter from './SearchBarPresenter';
+import HeaderPresenter from "./HeaderPresenter";
 
 function SearchResultPresenter(props) {
 
@@ -20,6 +22,8 @@ function SearchResultPresenter(props) {
 
     return (
         <Fragment>
+        <HeaderPresenter />
+        <SearchBarPresenter inputPlaceholder={query}/>
         { promiseNoData(promise,data,error) || (
             <SearchResultView 
                 data={data}

@@ -1,10 +1,5 @@
 import { NewsBlockPresenter } from "../../presenters";
 import {
-    ResultWrapper,
-    CiteWrapper,
-    NewsTitle,
-    NewsAbstract,
-    NewsUrl,
     ResultsWrapper,
 } from './style';
 

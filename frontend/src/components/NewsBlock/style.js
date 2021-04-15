@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export const NewsBlockWrapper = styled.div`
     position: relative;
     text-align: left;
+    margin-bottom: 30px;
 `;
 
 export const CiteWrapper = styled.div`

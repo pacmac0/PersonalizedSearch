@@ -19,4 +19,5 @@ export const Logo = styled.div`
     line-height: 32px;
     text-align: center;
     text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
 `;
