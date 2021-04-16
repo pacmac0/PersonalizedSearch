@@ -1,17 +1,35 @@
-import logo from './logo.svg';
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import './App.css';
-import SearchResultView from './pages/search';
-import Home from './pages/home';
-import { BrowserRouter, Route, Router } from 'react-router-dom';
+import {
+    HomePresenter,
+    SearchResultPresenter,
+    DetailsPresenter
+} from "./presenters";
 
-function App() {
+function App(props) {
+    const {
+        model
+    } = props;
+
   return (
     <div className="App">
-        <Home/>
-        <BrowserRouter>
-            <Route path='/' exact component={Home} />
-            <Route path='/search' exact component={SearchResultView} />
-        </BrowserRouter>
+        
+        <Router>
+            <Switch>
+                <Route path="/" exact>
+                    <HomePresenter model={model} />
+                </Route>
+
+                <Route path="/search/:query">
+                    <SearchResultPresenter model={model} />
+                </Route>
+
+                <Route path="/news/:newsID">
+                    <DetailsPresenter model={model} />
+                </Route>
+            </Switch>
+        </Router>
+
     </div>
   );
 }
