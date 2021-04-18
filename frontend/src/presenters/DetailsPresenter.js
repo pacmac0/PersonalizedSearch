@@ -28,13 +28,13 @@ function DetailsPresenter(props) {
         <Fragment>
             { promiseNoData(promise,data,error) || (
                 <DetailsView
-                    url={data[0]._source.url}
-                    news_id={data[0]._source.news_id}
-                    category={data[0]._source.category}
-                    sub_category={data[0]._source.sub_category}
-                    title={data[0]._source.title}
-                    abstract={data[0]._source.abstract}
-                    content={data[0]._source.body}
+                    url={data._source.url}
+                    news_id={data._source.news_id}
+                    category={data._source.category}
+                    sub_category={data._source.sub_category}
+                    title={data._source.title}
+                    abstract={data._source.abstract}
+                    content={data._source.body}
                     onClickReturn={redirectToSearchView}
                 />
             )}

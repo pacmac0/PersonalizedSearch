@@ -1,49 +1,67 @@
 import axios from 'axios';
 const NewsSource = {
-    async getSearchedResults(params) {
-        const query = {
-            query: {
-                bool: {
-                    should: [
-                        { match: { "abstract" : params}},
-                        { match: { "title" : params}},
-                        { match: { "category" : params}},
-                        { match: { "sub_category" : params}},
-                        { match: { "body" : params}}
-                    ]
-                }
-            }
-        };
-        return axios.get("http://localhost:9200/news/_search?", {
+
+    async getSearchedResults(search) {
+        return axios.get("http://localhost:8080/api/regularsearch", {
             params: {
-                source: JSON.stringify(query),
-                source_content_type: 'application/json'
-            }
+                query: search,
+            },
         }).then((res)=> {
-            console.log(res.data.hits.hits);
-            return res.data.hits.hits;
+            return res.data.result.hits.hits
+        }).catch((e) => {
+            console.log(e)
         })
     },
-    async getNewsById(params) {
-        const query = {
-            query: {
-                bool: {
-                    should: [
-                        { match: { "news_id": params}}
-                    ]
-                }
-            }
-        };
-        return axios.get("http://localhost:9200/news/_search?", {
+
+    async getRecommendation(newsid){
+        return axios.get("http://localhost:8080/api/getrecommendation", {
             params: {
-                source: JSON.stringify(query),
-                source_content_type: 'application/json'
-            }
+                id: newsid,
+            },
         }).then((res)=> {
-            console.log(res.data.hits.hits);
-            return res.data.hits.hits;
+            return res.data.result.docs
+        }).catch((e) => {
+            console.log(e)
         })
     },
+
+    async getNewsById(newsid) {
+        
+        return axios.get("http://localhost:8080/api/getnewsbyid", {
+            params: {
+                id:newsid
+            }
+        }).then((res)=> {
+            return res.data.result;
+        })
+    },
+
+    async personalizedSearch(userid, query){
+        return axios.get("http://localhost:8080/api/personalizedsearch", {
+            params: {
+                id: userid,
+                query: query,
+            },
+        }).then((res)=> {
+            return res.data.result.hits.hits
+        }).catch((e) => {
+            console.log(e)
+        })
+    },
+
+    // Don't have to return anything.. Just check that is worked by looking at the response?
+    async updateUser(userid, newsid){
+        return axios.get("http://localhost:8080/api/updateuser", {
+            params: {
+                id: userid,
+                click: newsid,
+            },
+        }).then((res)=> {
+            return res
+        }).catch((e) => {
+            console.log(e)
+        })
+    }
 }
 
 export default NewsSource;

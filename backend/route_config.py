@@ -13,6 +13,10 @@ cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 def getuser():
     return get_user()
 
+@app.route('/api/getnewsbyid', methods=['POST', 'GET'])
+def getnewsbyid():
+    return get_news_by_id()
+
 @app.route('/api/updateuser', methods=['POST', 'GET'])
 def updateuser():
     return update_user()

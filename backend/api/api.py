@@ -81,8 +81,15 @@ def get_recommendations():
         }
         }
     }
-    results = es.search(index = "users", body = body)
-    return success_response(results["aggregations"]["recommendations"]["buckets"])
+    recommendations = es.search(index = "users", body = body)
+    docstoretrieve = {"docs" : [{"_id": elem["key"]} for elem in recommendations["aggregations"]["recommendations"]["buckets"]]}
+    docs = es.mget(body=docstoretrieve, index="news")
+    return success_response(docs)
+
+def get_news_by_id():
+    data = request.args
+    results = es.get(index="news", id=data["id"])
+    return success_response(results)
 
 def personalized_search():
     data = request.args
