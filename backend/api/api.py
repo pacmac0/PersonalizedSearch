@@ -84,9 +84,6 @@ def get_recommendations():
     recommendations = es.search(index = "users", body = body)
     docstoretrieve = {"docs" : [{"_id": elem["key"]} for elem in recommendations["aggregations"]["recommendations"]["buckets"]]}
     if len(docstoretrieve["docs"]) == 0:
-        return success_response([])
-    docs = es.mget(body=docstoretrieve, index="news")
-    if len(docstoretrieve["docs"]) == 0:
             return success_response([])
     docs = es.mget(body=docstoretrieve, index="news")
     return success_response(docs)
