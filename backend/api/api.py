@@ -149,6 +149,14 @@ def personalized_search():
                     for t, t_value in term_vec.items():
                         docs_vectors[doc["_id"]][k][t] = t_value["score"]
 
+    # Doc 1
+    #   body: "term" ; score ... "term_n" ; score_n
+    #   title: "term" ; score ... "term_n" ; score_n
+    #   category: "term" ; score ... "term_n" ; score_n
+    # Doc 2
+    #   body: "term" ; score ... "term_n" ; score_n
+    #   title: "term" ; score ... "term_n" ; score_n
+    #   category: "term" ; score ... "term_n" ; score_n
 
     # (Cosine similarity) Dot product and sort search results
     
