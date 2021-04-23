@@ -1,11 +1,20 @@
 class PnewsModel {
     constructor() {
-        this.observers =[];
-        this.currentUser = "Fynn";
+        const modelString= localStorage.getItem("model");
+        let user = JSON.parse(modelString)
+        if (user != null){
+            this.currentUser = user.user
+        }
+
+        else{
+            this.currentUser = "Fynn";
+        }
+
+        this.observers = [];
         this.users = ["Fynn","Hamza","Artin","Yuqi","No"];
     }
     changeUser(id) {
-        console.log("change to user: "+id);
+        localStorage.setItem("model", JSON.stringify({user: id}))
         this.currentUser = id;
         this.notifyObservers();
     }
