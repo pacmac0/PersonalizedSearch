@@ -1,8 +1,6 @@
 import React from "react";
 import {RecommendationNewsBlock} from "../components";
 import { useHistory } from "react-router-dom";
-import { useLocation } from "react-router-dom";
-import { createBrowserHistory } from "history";
 
 function RecommendationNewsBlockPresenter(props) {
 
@@ -22,7 +20,7 @@ function RecommendationNewsBlockPresenter(props) {
             id={id}
             title={title}
             abstract={abstract}       
-            onClick={(e)=>redirectToNewsDetails(id)}
+            onClick={(e)=>{window.location.reload(); redirectToNewsDetails(id);}}
         />
     );
 
