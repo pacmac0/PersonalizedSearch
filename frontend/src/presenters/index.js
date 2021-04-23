@@ -6,6 +6,7 @@ import SearchBarPresenter from "./SearchBarPresenter";
 import HeaderPresenter from "./HeaderPresenter";
 import RecommendationPresenter from "./RecommendationPresenter";
 import RecommendationNewsBlockPresenter from "./RecommendationNewsBlockPresenter";
+import UserPresenter from "./UserPresenter";
 
 export {
     HomePresenter,
@@ -15,5 +16,6 @@ export {
     SearchBarPresenter,
     HeaderPresenter,
     RecommendationPresenter,
-    RecommendationNewsBlockPresenter
+    RecommendationNewsBlockPresenter,
+    UserPresenter
 };

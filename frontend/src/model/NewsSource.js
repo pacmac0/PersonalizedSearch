@@ -43,7 +43,7 @@ const NewsSource = {
                 query: query,
             },
         }).then((res)=> {
-            return res.data.result.hits.hits
+            return res.data.result
         }).catch((e) => {
             console.log(e)
         })

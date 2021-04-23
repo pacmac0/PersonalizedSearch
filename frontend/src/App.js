@@ -3,7 +3,8 @@ import './App.css';
 import {
     HomePresenter,
     SearchResultPresenter,
-    DetailsPresenter
+    DetailsPresenter,
+    UserPresenter
 } from "./presenters";
 
 function App(props) {
@@ -18,14 +19,17 @@ function App(props) {
             <Switch>
                 <Route path="/" exact>
                     <HomePresenter model={model} />
+                    <UserPresenter model={model} />
                 </Route>
 
                 <Route path="/search/:query">
                     <SearchResultPresenter model={model} />
+                    <UserPresenter model={model} />
                 </Route>
 
                 <Route path="/news/:newsID">
                     <DetailsPresenter model={model} />
+                    <UserPresenter model={model} />
                 </Route>
             </Switch>
         </Router>

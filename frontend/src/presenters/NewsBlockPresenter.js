@@ -1,6 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import { NewsBlock } from "../components";
+import { NewsSource } from "../model";
 
 function NewsBlockPresenter(props) {
     const {
@@ -10,6 +11,7 @@ function NewsBlockPresenter(props) {
         category,
         sub_category,
         abstract,
+        model
     } = props;
 
     const browserHistory = useHistory();
@@ -26,7 +28,7 @@ function NewsBlockPresenter(props) {
             category={category}
             sub_category={sub_category}
             abstract={abstract}       
-            onClickNews={(e)=>redirectToNewsDetails(id)}
+            onClickNews={(e)=>{redirectToNewsDetails(id); NewsSource.updateUser(model.getCurrentUser(),id);}}
         />
     );
 }

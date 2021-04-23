@@ -3,5 +3,6 @@ import NewsBlock from "./NewsBlock";
 import SearchBar from "./SearchBar";
 import Header from "./Header";
 import RecommendationNewsBlock from "./RecommendationNewsBlock";
+import User from "./User";
 
-export { NewsBlock, promiseNoData, SearchBar, Header, RecommendationNewsBlock };
+export { NewsBlock, promiseNoData, SearchBar, Header, RecommendationNewsBlock, User };

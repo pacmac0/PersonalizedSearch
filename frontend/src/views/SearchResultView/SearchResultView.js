@@ -5,7 +5,10 @@ import {
 
 function SearchResultView(props) {
 
-    const { data } = props;
+    const { 
+        data,
+        model 
+    } = props;
 
     return (
         <div className="SearchResultView">
@@ -22,7 +25,8 @@ function SearchResultView(props) {
                                 title={elem._source.title}
                                 category={elem._source.category}
                                 sub_category={elem._source.sub_category}
-                                abstract={elem._source.abstract}       
+                                abstract={elem._source.abstract}
+                                model = {model}       
                             />
                         )
                     })}
