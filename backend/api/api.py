@@ -187,9 +187,9 @@ def personalized_search():
 
     # user vector = w_1*body_vector + w_1*category + w_3*title
     weights = dict()
-    weights["body"] = 2
-    weights["category"] = 4
-    weights["title"] = 1
+    weights["body"] = 1
+    weights["category"] = 2
+    weights["title"] = 2
     user_vector  = utils.aggregate_vecs(ret, weights)
 
     scores = dict()
