@@ -29,6 +29,8 @@ def regular_search():
     results = utils.search(data["query"], es)
     return success_response(results)
 
+
+
 def update_user():
     data = request.args
     # retrieve user
@@ -99,7 +101,7 @@ def get_recommendations():
         "significant_terms": {
             "field": "history.keyword",
             "exclude": data["id"],
-            "min_doc_count": 2
+            "min_doc_count": 1
         }
         }
         }
