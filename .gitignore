@@ -354,3 +354,4 @@ elasticsearch-7.12.0/
 data/
 MIND-master/
 kibana-7.12.0-darwin-x86_64/
+.DS_Store
