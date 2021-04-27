@@ -59,6 +59,13 @@ def get_user():
     results = utils.get_user(data["id"], es)
     return success_response(results)
 
+
+def delete_user():
+    data = request.args
+    results = es.delete(index="users", id=data["id"])
+    return success_response(results)
+
+
 def get_recommendations():
     data = request.args
     body = {
@@ -148,6 +155,14 @@ def personalized_search():
                     for t, t_value in term_vec.items():
                         docs_vectors[doc["_id"]][k][t] = t_value["score"]
 
+    # Doc 1
+    #   body: "term" ; score ... "term_n" ; score_n
+    #   title: "term" ; score ... "term_n" ; score_n
+    #   category: "term" ; score ... "term_n" ; score_n
+    # Doc 2
+    #   body: "term" ; score ... "term_n" ; score_n
+    #   title: "term" ; score ... "term_n" ; score_n
+    #   category: "term" ; score ... "term_n" ; score_n
 
     # (Cosine similarity) Dot product and sort search results
 
