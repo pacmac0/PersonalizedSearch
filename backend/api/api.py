@@ -59,6 +59,13 @@ def get_user():
     results = utils.get_user(data["id"], es)
     return success_response(results)
 
+
+def delete_user():
+    data = request.args
+    results = es.delete(index="users", id=data["id"])
+    return success_response(results)
+
+
 def get_recommendations():
     data = request.args
     body = {
