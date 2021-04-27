@@ -23,6 +23,10 @@ def getnewsbyid():
 def deleteuser():
     return delete_user()
 
+@app.route('/api/gethistory', methods=['POST', 'GET'])
+def gethistory():
+    return get_history()
+    
 @app.route('/api/updateuser', methods=['POST', 'GET'])
 def updateuser():
     return update_user()

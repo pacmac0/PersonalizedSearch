@@ -60,6 +60,25 @@ def get_user():
     return success_response(results)
 
 
+def get_history():
+    data = request.args
+    user = utils.get_user(data["id"], es)
+    if user["hits"]["total"]["value"] != 1:
+        return success_response({"docs": []})
+    # ------------------------------------------
+    history = user["hits"]["hits"][0]["_source"]["history"]
+    if len(history) > 10:
+        history = history[-10:]
+
+    docstoretrieve = {"docs" : [{"_id": elem} for elem in history]}
+    if len(docstoretrieve["docs"]) == 0:
+            return success_response([])
+    docs = es.mget(body=docstoretrieve, index="news")
+    return success_response(docs)
+
+
+
+
 def delete_user():
     data = request.args
     results = es.delete(index="users", id=data["id"])
