@@ -77,8 +77,6 @@ def get_history():
     return success_response(docs)
 
 
-
-
 def delete_user():
     data = request.args
     results = es.delete(index="users", id=data["id"])

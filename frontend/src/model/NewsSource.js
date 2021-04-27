@@ -25,6 +25,18 @@ const NewsSource = {
         })
     },
 
+    async gethistory(userid){
+        return axios.get("http://0.0.0.0:8080/api/gethistory", {
+            params: {
+                id: userid,
+            },
+        }).then((res)=> {
+            return res.data.result.docs
+        }).catch((e) => {
+            console.log(e)
+        })
+    },
+
     async getNewsById(newsid) {
         
         return axios.get("http://localhost:8080/api/getnewsbyid", {
