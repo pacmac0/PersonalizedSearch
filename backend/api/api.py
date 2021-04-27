@@ -6,7 +6,6 @@ JSON_MIME_TYPE = 'application/json; charset=utf-8'
 from elasticsearch import Elasticsearch
 
 es = Elasticsearch()
-
 def success_response(result, message=''):
     format = {'status': 'success',
                   'message': message,
@@ -100,7 +99,7 @@ def get_recommendations():
         "significant_terms": {
             "field": "history.keyword",
             "exclude": data["id"],
-            "min_doc_count": 100
+            "min_doc_count": 2
         }
         }
         }

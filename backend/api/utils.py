@@ -14,6 +14,7 @@ def get_user(id, es):
 
 def search(query, es):
     body = {
+        "size":25,
         "query": {
             "bool": {
                 "should": [
