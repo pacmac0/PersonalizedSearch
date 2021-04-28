@@ -8,7 +8,11 @@ export const HistoryWrapper = styled.div`
     height: 60%;
     overflow: scroll;
     padding: 10px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.2s;
+    &:hover{
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    }
 `;
 
 export const SingleHistoryWrapper = styled.div`
@@ -20,6 +24,7 @@ export const SingleHistoryWrapper = styled.div`
 `;
 
 export const HistoryOwner = styled.div`
+    padding-top: 10px;
     font-family: Georgia;
     font-size: 20px;
     padding-bottom: 20px;

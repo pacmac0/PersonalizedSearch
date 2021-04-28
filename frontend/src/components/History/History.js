@@ -8,7 +8,7 @@ function History(props) {
     return (
         <div className="History">
             { 
-                data.length !==0 ?
+                data.length !==0 && currentUser!=="No" ?
                 <HistoryWrapper>
                     <HistoryOwner>
                         {currentUser}'s History
