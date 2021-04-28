@@ -1,6 +1,7 @@
 import {RecommendationNewsBlockPresenter} from "../../presenters";
 import {
-    RecommendationWrapper
+    RecommendationWrapper,
+    RecommendationViewWrapper
 } from "./style";
 
 function RecommendationView(props) {
@@ -9,6 +10,7 @@ function RecommendationView(props) {
     } = props;
     return (
         <div className="Recommendation">
+            <RecommendationViewWrapper>
             <h3>Recommendations for Related News</h3>
                 {
                     data.length !==0 ? 
@@ -24,7 +26,7 @@ function RecommendationView(props) {
                         )}
                     </RecommendationWrapper>
                 : ""}
-            
+            </RecommendationViewWrapper>
         </div>
     );
 }
