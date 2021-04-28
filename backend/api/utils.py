@@ -14,18 +14,19 @@ def get_user(id, es):
 
 def search(query, es):
     body = {
+        "size":25,
         "query": {
-                "bool": {
-                    "should": [
-                        { "match": { "abstract" : query}},
-                        { "match": { "title" : query}},
-                        { "match": { "category" : query}},
-                        { "match": { "sub_category" : query}},
-                        { "match": { "body" : query}}
-                    ]
-                }
+            "bool": {
+                "should": [
+                    { "match": { "abstract" : query}},
+                    { "match": { "title" : query}},
+                    { "match": { "category" : query}},
+                    { "match": { "sub_category" : query}},
+                    { "match": { "body" : query}}
+                ]
             }
         }
+    }
     results = es.search(index="news", body=body)
     return results
 

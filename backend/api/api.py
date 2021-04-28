@@ -6,7 +6,6 @@ JSON_MIME_TYPE = 'application/json; charset=utf-8'
 from elasticsearch import Elasticsearch
 
 es = Elasticsearch()
-
 def success_response(result, message=''):
     format = {'status': 'success',
                   'message': message,
@@ -29,6 +28,8 @@ def regular_search():
     data = request.args
     results = utils.search(data["query"], es)
     return success_response(results)
+
+
 
 def update_user():
     data = request.args
@@ -59,6 +60,30 @@ def get_user():
     results = utils.get_user(data["id"], es)
     return success_response(results)
 
+
+def get_history():
+    data = request.args
+    user = utils.get_user(data["id"], es)
+    if user["hits"]["total"]["value"] != 1:
+        return success_response({"docs": []})
+    # ------------------------------------------
+    history = user["hits"]["hits"][0]["_source"]["history"]
+    if len(history) > 10:
+        history = history[-10:]
+
+    docstoretrieve = {"docs" : [{"_id": elem} for elem in history]}
+    if len(docstoretrieve["docs"]) == 0:
+            return success_response([])
+    docs = es.mget(body=docstoretrieve, index="news")
+    return success_response(docs)
+
+
+def delete_user():
+    data = request.args
+    results = es.delete(index="users", id=data["id"])
+    return success_response(results)
+
+
 def get_recommendations():
     data = request.args
     body = {
@@ -76,7 +101,7 @@ def get_recommendations():
         "significant_terms": {
             "field": "history.keyword",
             "exclude": data["id"],
-            "min_doc_count": 100
+            "min_doc_count": 1
         }
         }
         }
@@ -118,15 +143,14 @@ def personalized_search():
     for doc in results['docs']:
         if "term_vectors" in doc:
             for k in news_fields:
-                # some news haven't a field (N47482 haven't a text)
                 if k in doc["term_vectors"]:
                     term_vec = doc["term_vectors"][k]["terms"]
                     for t, t_value in term_vec.items():
                         if t in ret[k]:
-                            ret[k][t] += t_value["score"]
+                            # change it
+                            ret[k][t] = (ret[k][t] + t_value["score"])/2
                         else:
                             ret[k][t] = t_value["score"]
-    
     # Normalize
     for key, value in ret.items():
         ret[key] = utils.normalize_vec(value)
@@ -149,18 +173,28 @@ def personalized_search():
                     for t, t_value in term_vec.items():
                         docs_vectors[doc["_id"]][k][t] = t_value["score"]
 
+    # Doc 1
+    #   body: "term" ; score ... "term_n" ; score_n
+    #   title: "term" ; score ... "term_n" ; score_n
+    #   category: "term" ; score ... "term_n" ; score_n
+    # Doc 2
+    #   body: "term" ; score ... "term_n" ; score_n
+    #   title: "term" ; score ... "term_n" ; score_n
+    #   category: "term" ; score ... "term_n" ; score_n
 
     # (Cosine similarity) Dot product and sort search results
-    
+
     # user vector = w_1*body_vector + w_1*category + w_3*title
     weights = dict()
     weights["body"] = 1
-    weights["category"] = 5
+    weights["category"] = 2
     weights["title"] = 2
     user_vector  = utils.aggregate_vecs(ret, weights)
 
     scores = dict()
     for doc, vector in docs_vectors.items():
+        for key, value in vector.items():
+            vector[key] = utils.normalize_vec(value)
         document_vector  = utils.aggregate_vecs(vector, weights)
         score = utils.cosine_similarity(document_vector, user_vector)
         scores[doc] = score
@@ -176,6 +210,7 @@ def personalized_search():
 
     search_results["hits"]["hits"] = sorted(search_results["hits"]["hits"], key=lambda k: k['_score'], reverse=True)
     return success_response(search_results["hits"]["hits"])
+    #return success_response(ret)
 
 
 
