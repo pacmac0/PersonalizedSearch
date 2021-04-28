@@ -71,6 +71,7 @@ def get_history():
     if len(history) > 10:
         history = history[-10:]
 
+    history.reverse()
     docstoretrieve = {"docs" : [{"_id": elem} for elem in history]}
     if len(docstoretrieve["docs"]) == 0:
             return success_response([])
