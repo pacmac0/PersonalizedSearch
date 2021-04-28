@@ -20,7 +20,7 @@ function RecommendationNewsBlockPresenter(props) {
             id={id}
             title={title}
             abstract={abstract}       
-            onClick={(e)=>{window.location.reload(); redirectToNewsDetails(id);}}
+            onClick={(e)=>{ redirectToNewsDetails(id);window.location.reload();}}
         />
     );
 
