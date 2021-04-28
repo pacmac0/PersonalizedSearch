@@ -63,6 +63,9 @@ const NewsSource = {
 
     // Don't have to return anything.. Just check that is worked by looking at the response?
     async updateUser(userid, newsid){
+        if (userid === "No"){
+            return;
+        }
         return axios.get("http://localhost:8080/api/updateuser", {
             params: {
                 id: userid,
