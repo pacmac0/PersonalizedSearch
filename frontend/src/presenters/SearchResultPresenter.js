@@ -7,6 +7,7 @@ import { promiseNoData, User } from "../components";
 import SearchBarPresenter from './SearchBarPresenter';
 import HeaderPresenter from "./HeaderPresenter";
 import UserPresenter from './UserPresenter';
+import HistoryPresenter from "./HistoryPresenter";
 
 function SearchResultPresenter(props) {
 
@@ -40,6 +41,7 @@ function SearchResultPresenter(props) {
                 model={model}
             />
         )}
+        <HistoryPresenter model={model}/>
         </Fragment>
     );
 };

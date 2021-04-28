@@ -8,7 +8,7 @@ function UserPresenter(props) {
         <User 
             currentUser={currentUser[0]}
             options={model.getUsersList()}
-            onClick={(e)=>{model.changeUser(e.target.textContent)}}
+            onClick={(e)=>{model.changeUser(e.target.textContent);window.location.reload();}}
         />
     );
 }
