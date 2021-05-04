@@ -71,7 +71,7 @@ def aggregate_vecs(user_vectors, weights):
     return ret
 
 
-def normalize_vec(term_vec, ord_=2):
+def normalize_vec(term_vec, ord_=1):
     elements = list(term_vec.values())
     norm = np.linalg.norm(elements, ord=ord_)
 

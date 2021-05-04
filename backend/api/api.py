@@ -139,8 +139,11 @@ def personalized_search():
     # Term vectors of history ids. 
     results = utils.get_term_vectors(history, news_fields, es)
     ret = dict()
+    # to compute the mean
+    normalization = dict()
     for c in news_fields:
         ret[c] = dict()
+        normalization[c] = dict()
     for doc in results['docs']:
         if "term_vectors" in doc:
             for k in news_fields:
@@ -148,10 +151,17 @@ def personalized_search():
                     term_vec = doc["term_vectors"][k]["terms"]
                     for t, t_value in term_vec.items():
                         if t in ret[k]:
-                            # change it
-                            ret[k][t] = (ret[k][t] + t_value["score"])/2
+                            # change it with the mean
+                            ret[k][t] += t_value["score"]
+                            normalization[k][t] += 1
                         else:
                             ret[k][t] = t_value["score"]
+                            normalization[k][t] = 1
+    # compute the mean
+    for field in ret.keys():
+        for term in ret[k].keys():
+            ret[k][t] = ret[k][term]/normalization[k][term]
+    
     # Normalize
     for key, value in ret.items():
         ret[key] = utils.normalize_vec(value)
@@ -187,9 +197,9 @@ def personalized_search():
 
     # user vector = w_1*body_vector + w_1*category + w_3*title
     weights = dict()
-    weights["body"] = 1
-    weights["category"] = 2
-    weights["title"] = 2
+    weights["body"] = 2
+    weights["category"] = 4
+    weights["title"] = 1
     user_vector  = utils.aggregate_vecs(ret, weights)
 
     scores = dict()
@@ -200,18 +210,25 @@ def personalized_search():
         score = utils.cosine_similarity(document_vector, user_vector)
         scores[doc] = score
     
-    #scores = utils.get_sorted_dict(scores)
+
+    # new_score = old_score + alpha*user_vector * doc_score
+    alpha = 0.5
+    # normlize the old_score and new_score
+    norm_old = 0
+    for s_rslt in search_results["hits"]["hits"]:
+        norm_old += s_rslt['_score']
+
+    norm_new = 0
+    for score in scores.values():
+        norm_new += score
 
     # change documents score
-
     for s_rslt in search_results["hits"]["hits"]:
-        s_rslt['_score'] = scores[s_rslt['_id']]
-
+        s_rslt['_score'] = s_rslt['_score']/norm_old + alpha*scores[s_rslt['_id']]/norm_new
     # reorder documents
 
     search_results["hits"]["hits"] = sorted(search_results["hits"]["hits"], key=lambda k: k['_score'], reverse=True)
     return success_response(search_results["hits"]["hits"])
-    #return success_response(ret)
 
 
 
