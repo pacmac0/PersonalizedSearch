@@ -27,6 +27,14 @@ def success_message(message):
 def regular_search():
     data = request.args
     results = utils.search(data["query"], es)
+    print()
+    s = ""
+    i = 1
+    for elem in results["hits"]["hits"]:
+        print(elem)
+        s += str(i) +" & " +elem["_source"]["title"] + "& " +"& " +"\\\\" + "\n"
+        i += 1
+    print(s)
     return success_response(results)
 
 
