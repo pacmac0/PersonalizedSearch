@@ -212,7 +212,7 @@ def personalized_search():
     
 
     # new_score = old_score + alpha*user_vector * doc_score
-    alpha = 0.5
+    p = 0.5
     # normlize the old_score and new_score
     norm_old = 0
     for s_rslt in search_results["hits"]["hits"]:
@@ -224,7 +224,7 @@ def personalized_search():
 
     # change documents score
     for s_rslt in search_results["hits"]["hits"]:
-        s_rslt['_score'] = s_rslt['_score']/norm_old + alpha*scores[s_rslt['_id']]/norm_new
+        s_rslt['_score'] = (1-p) * s_rslt['_score']/norm_old + p*scores[s_rslt['_id']]/norm_new
     # reorder documents
 
     search_results["hits"]["hits"] = sorted(search_results["hits"]["hits"], key=lambda k: k['_score'], reverse=True)
