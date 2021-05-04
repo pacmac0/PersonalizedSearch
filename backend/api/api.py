@@ -197,9 +197,9 @@ def personalized_search():
 
     # user vector = w_1*body_vector + w_1*category + w_3*title
     weights = dict()
-    weights["body"] = 2
-    weights["category"] = 4
-    weights["title"] = 1
+    weights["body"] = 1
+    weights["category"] = 2
+    weights["title"] = 2.5
     user_vector  = utils.aggregate_vecs(ret, weights)
 
     scores = dict()
@@ -212,7 +212,7 @@ def personalized_search():
     
 
     # new_score = old_score + alpha*user_vector * doc_score
-    p = 0.5
+    p = 0.85
     # normlize the old_score and new_score
     norm_old = 0
     for s_rslt in search_results["hits"]["hits"]:
