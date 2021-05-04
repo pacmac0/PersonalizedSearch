@@ -32,7 +32,7 @@ def regular_search():
     i = 1
     for elem in results["hits"]["hits"]:
         print(elem)
-        s += str(i) +" & " +elem["_source"]["title"] + "& " +"& " +"\\\\" + "\n"
+        s += str(i) +" & " +elem["_id"] + "& " +"& " +"\\\\" + "\n"
         i += 1
     print(s)
     return success_response(results)
