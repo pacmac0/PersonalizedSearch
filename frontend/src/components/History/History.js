@@ -15,7 +15,7 @@ function History(props) {
                     </HistoryOwner>
                     {data.map((history,index)=>(
                         <SingleHistoryWrapper key={index}>
-                            {index+1}. {history._source.title}
+                            {index+1}. {history._source.title} <br/> >> <b>{history._source.category}>{history._source.sub_category}</b>
                         </SingleHistoryWrapper>
                     )
                     )}
