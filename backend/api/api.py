@@ -27,14 +27,15 @@ def success_message(message):
 def regular_search():
     data = request.args
     results = utils.search(data["query"], es)
+    # print for report
     print()
     s = ""
     i = 1
     for elem in results["hits"]["hits"]:
-        print(elem)
-        s += str(i) +" & " +elem["_id"] + "& " +"& " +"\\\\" + "\n"
+        s += str(i) +" & " +elem["_id"] + " & " + " & " +"\\\\" + "\n"
         i += 1
     print(s)
+
     return success_response(results)
 
 
@@ -236,6 +237,15 @@ def personalized_search():
     # reorder documents
 
     search_results["hits"]["hits"] = sorted(search_results["hits"]["hits"], key=lambda k: k['_score'], reverse=True)
+
+    # print for report
+    print()
+    s = ""
+    i = 1
+    for elem in search_results["hits"]["hits"]:
+        s += str(i) +" & " + " & " + elem["_id"] + " & " +"\\\\" + "\n"
+        i += 1
+    print(s)
     return success_response(search_results["hits"]["hits"])
 
 
