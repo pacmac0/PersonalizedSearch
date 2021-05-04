@@ -3,6 +3,8 @@ import api.utils as utils
 from flask import request, g, make_response
 import json
 JSON_MIME_TYPE = 'application/json; charset=utf-8'
+import math
+import copy
 from elasticsearch import Elasticsearch
 
 es = Elasticsearch()
@@ -38,8 +40,36 @@ def regular_search():
 
     return success_response(results)
 
+def ndcg(regular_search, personalized_search):
+    f = open("/Users/peppercake/KTH/search/backend/api/apple.txt", "r")
+    lines = f.readlines()
+    ratings = dict()
+    for line in lines:
+        (id, rating) = line.split(" ")
+        ratings[id] = int(rating)
+    optimal_results = sorted(ratings.values(), reverse=True)
+
+    ideal = 0
+    for i in range(len(optimal_results)):
+        oneindexedI = i + 1
+        ideal += (optimal_results[i] / math.log2(oneindexedI + 1))
+    
+    regular = 0
+    for i in range(len(optimal_results)):
+        oneindexedI = i + 1
+        regular += (ratings[regular_search[i]["_id"]] / math.log2(oneindexedI + 1))
+
+    personalized = 0
+    for i in range(len(optimal_results)):
+        oneindexedI = i + 1
+        personalized += (ratings[personalized_search[i]["_id"]] / math.log2(oneindexedI + 1))
+
+    print("Regular Search NDCG:", regular/ideal, "DCG:", regular)
+    print("Personalized Search NDCG:", personalized/ideal, "DCG:", personalized)
+    print("Optimal DCG:", ideal)
 
 
+    
 def update_user():
     data = request.args
     # retrieve user
@@ -231,13 +261,18 @@ def personalized_search():
     for score in scores.values():
         norm_new += score
 
+    # Store copy of regular search to calculate NDCG
+    regular_s = copy.deepcopy(search_results["hits"]["hits"])
+
     # change documents score
     for s_rslt in search_results["hits"]["hits"]:
         s_rslt['_score'] = (1-p) * s_rslt['_score']/norm_old + p*scores[s_rslt['_id']]/norm_new
     # reorder documents
-
     search_results["hits"]["hits"] = sorted(search_results["hits"]["hits"], key=lambda k: k['_score'], reverse=True)
 
+    if False:
+        ndcg(regular_s, search_results["hits"]["hits"])
+    
     # print for report
     print()
     s = ""
