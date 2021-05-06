@@ -7,6 +7,12 @@ import math
 import copy
 from elasticsearch import Elasticsearch
 
+# Config var
+calculate_ndcg_score = True
+#ndcg_scorring_file = "/Users/pacmac/Documents/GitHub/KTH_Projects/DD2476PersonalizedSearch/backend/api/markets_fynn.txt"
+ndcg_scorring_file = "/Users/pacmac/Documents/GitHub/KTH_Projects/DD2476PersonalizedSearch/backend/api/markets_artin.txt"
+
+
 es = Elasticsearch()
 def success_response(result, message=''):
     format = {'status': 'success',
@@ -41,7 +47,7 @@ def regular_search():
     return success_response(results)
 
 def ndcg(regular_search, personalized_search):
-    f = open("/Users/peppercake/KTH/search/backend/api/apple.txt", "r")
+    f = open(ndcg_scorring_file, "r")
     lines = f.readlines()
     ratings = dict()
     for line in lines:
@@ -64,9 +70,9 @@ def ndcg(regular_search, personalized_search):
         oneindexedI = i + 1
         personalized += (ratings[personalized_search[i]["_id"]] / math.log2(oneindexedI + 1))
 
-    print("Regular Search NDCG:", regular/ideal, "DCG:", regular)
+    print("Regular Search NDCG:     ", regular/ideal, "DCG:", regular)
     print("Personalized Search NDCG:", personalized/ideal, "DCG:", personalized)
-    print("Optimal DCG:", ideal)
+    print(" "*37 + "Optimal DCG:", ideal)
 
 
     
@@ -251,7 +257,7 @@ def personalized_search():
     
 
     # new_score = old_score + alpha*user_vector * doc_score
-    p = 0.85
+    p = 1.0
     # normlize the old_score and new_score
     norm_old = 0
     for s_rslt in search_results["hits"]["hits"]:
@@ -270,7 +276,7 @@ def personalized_search():
     # reorder documents
     search_results["hits"]["hits"] = sorted(search_results["hits"]["hits"], key=lambda k: k['_score'], reverse=True)
 
-    if False:
+    if calculate_ndcg_score:
         ndcg(regular_s, search_results["hits"]["hits"])
     
     # print for report
