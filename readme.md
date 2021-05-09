@@ -5,9 +5,9 @@
 
 ### Get data
 1. Follow crawler/README.md to crawl body data from the web sources using spider. 
-2. convert news data from crawler to importable format in processable chunks, with convert_crawled_to_importable.py in converters direcotry
+2. convert news data from crawler to importable format in processable chunks, with convert_crawled_to_importable.py in converters directory
     => run python3 convert_crawled_to_importable.py "src-path" "dest-path"
-3. convert user data from file to importable format in processable chunks, with userdata_converter.py in converters direcotry.
+3. convert user data from file to importable format in processable chunks, with userdata_converter.py in converters directory.
     This will take the user data from "data/MINDlarge_train/behaviors.tsv" (example) and write chunck files to "user_data/user"
     => run python3 userdata_converter.py
 4. import all news and user files to elastic search
@@ -16,14 +16,17 @@
         - train_files (dir: news converted to importable)
         - train_user_data (dir: user data converted to importable)
         - run import_data_to_elastic.sh
+5. Run this command when Elastic Search is running in your terminal and all data is added:
+``` 
+curl -XPUT "http://localhost:9200/users/_mapping" -H 'Content-Type: application/json' -d '{"properties": {"history": {"type": "text", "fielddata": true}}}'
+```
 
 ### Run all required services
 From project root use following comands to start all servers
 1. sh elasticsearch-7.12.0/bin/elasticsearch
 2. cd backend && python3 server_config.py
 3. cd frontend && npm start
-Optional:
-4. sh kibana-7.12.0-darwin-x86_64/bin/kibana
+4. Optional: sh kibana-7.12.0-darwin-x86_64/bin/kibana
 
 The web/api interfaces should now be available at
 1. http://localhost:9200/
